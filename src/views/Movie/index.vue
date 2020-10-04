@@ -42,7 +42,14 @@ export default {
     components: {
         Header,
         TabBar
-    }
+    },
+    data() {
+        return {
+            cityList: []
+        }
+    },
+    
+    
 }
 </script>
 

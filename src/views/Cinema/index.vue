@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="cinema">
         <Header title="喵喵影院"/>
 
         <div id="content">
@@ -39,5 +39,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.cinema { height: 100%; display: flex; flex-direction: column;}
 #content .cinema_menu{ width: 100%; height: 45px; border-bottom:1px solid #e6e6e6; display: flex; justify-content:space-around; align-items:center; background:white;}
 </style>

@@ -14,70 +14,18 @@
           <li>北京</li>
         </ul>
       </div>
-      <div class="city_sort">
-        <div>
-          <h2>A</h2>
+      <div class="city_sort" ref="city_sort">
+        <div v-for="(cityList, letter) in cityDataObj" :key="letter">
+          <h2>{{letter}}</h2>
           <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
+            <li v-for="city in cityList" :key="city.id">{{city.nm}}</li>
           </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-        <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-        <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
+        </div>  
       </div>
     </div>
     <div class="city_index">
       <ul>
-        <li>A</li>
-        <li>B</li>
-        <li>C</li>
-        <li>D</li>
-        <li>E</li>
+        <li v-for="(cityList, letter) in cityDataObj" :key="letter" @click="goLetter(letter)">{{letter}}</li>
       </ul>
     </div>
   </div>
@@ -85,7 +33,51 @@
 
 <script>
 export default {
-    name: 'City'
+    name: 'City',
+    // async created () {
+    //     this.cityList = await this.$axios.get('https://m.maoyan.com/dianying/cities.json')
+    // }
+    data() {
+      return {
+        cityDataObj: null
+      }
+    },
+    mounted() {
+      this.$axios.get('/dianying/cities.json')
+      .then(res=>{
+        if(res.status == 200){
+          this.cityDataObj = this.formatCityList(res.data.cts)
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+    methods:{
+      // 格式化返回的城市列表数据
+      formatCityList(cities){
+        let obj = {}
+          for(let i = 65;i < 91; i++){
+            let letter = String.fromCharCode(i)
+            obj[letter] = cities.filter(city=>city.py.startsWith(letter.toLowerCase()))
+            if(!obj[letter].length){
+              delete obj[letter]
+            }
+          }
+        return obj
+      },
+      goLetter(letter) {
+        // 获取所有的h2
+        var h2List = this.$refs.city_sort.getElementsByTagName('h2')
+        for(let i=0;i<h2List.length;i++){
+          // h2的内容和传入的字母一致
+          if(h2List[i].innerText === letter){
+            // 将该字母所在的h2的offsetTop，赋值给滚动容器的scrollTop
+            this.$refs.city_sort.parentNode.scrollTop = h2List[i].offsetTop
+          }
+        }
+         
+      }
+    }
 };
 </script>
 
