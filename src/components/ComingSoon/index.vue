@@ -1,83 +1,13 @@
 <template>
   <div class="movie_body">
     <ul>
-      <li>
-        <div class="pic_show"><img src="images/movie_1.jpg" /></div>
+      <li v-for="item in comingSoonList" :key="item.id">
+        <div class="pic_show"><img :src="item.img | setWH(128, 180)" /></div>
         <div class="info_list">
-          <h2>无名之辈</h2>
-          <p><span class="person">17746</span> 人想看</p>
-          <p>主演: 陈建斌,任素汐,潘斌龙</p>
-          <p>2018-11-30上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="images/movie_2.jpg" /></div>
-        <div class="info_list">
-          <h2>毒液：致命守护者</h2>
-          <p><span class="person">2346</span> 人想看</p>
-          <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-          <p>2018-11-30上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="images/movie_1.jpg" /></div>
-        <div class="info_list">
-          <h2>无名之辈</h2>
-          <p><span class="person">17746</span> 人想看</p>
-          <p>主演: 陈建斌,任素汐,潘斌龙</p>
-          <p>2018-11-30上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="images/movie_2.jpg" /></div>
-        <div class="info_list">
-          <h2>毒液：致命守护者</h2>
-          <p><span class="person">2346</span> 人想看</p>
-          <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-          <p>2018-11-30上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="images/movie_1.jpg" /></div>
-        <div class="info_list">
-          <h2>无名之辈</h2>
-          <p><span class="person">17746</span> 人想看</p>
-          <p>主演: 陈建斌,任素汐,潘斌龙</p>
-          <p>2018-11-30上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="images/movie_2.jpg" /></div>
-        <div class="info_list">
-          <h2>毒液：致命守护者</h2>
-          <p><span class="person">2346</span> 人想看</p>
-          <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-          <p>2018-11-30上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="images/movie_1.jpg" /></div>
-        <div class="info_list">
-          <h2>无名之辈</h2>
-          <p><span class="person">17746</span> 人想看</p>
-          <p>主演: 陈建斌,任素汐,潘斌龙</p>
-          <p>2018-11-30上映</p>
-        </div>
-        <div class="btn_pre">预售</div>
-      </li>
-      <li>
-        <div class="pic_show"><img src="images/movie_2.jpg" /></div>
-        <div class="info_list">
-          <h2>毒液：致命守护者</h2>
-          <p><span class="person">2346</span> 人想看</p>
-          <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-          <p>2018-11-30上映</p>
+          <h2>{{item.nm}} <img v-if="item.version" :src="item.version | versionType"/></h2>
+          <p><span class="person">{{item.wish}}</span> 人想看</p>
+          <p>主演: {{item.star}}</p>
+          <p>{{item.rt}}上映</p>
         </div>
         <div class="btn_pre">预售</div>
       </li>
@@ -87,7 +17,39 @@
 
 <script>
 export default {
-    name: 'ComingSoon'
+    name: 'ComingSoon',
+    data() {
+      return {
+        comingSoonList: []
+      }
+    },
+    mounted() {
+//       comingTitle: "10月5日 周一"
+// globalReleased: false
+// haspromotionTag: false
+// id: 1336822
+// img: "http://p1.meituan.net/w.h/movie/828d68173a64a721d54a61be167a9c864358691.jpg"
+// nm: "再见吧！少年"
+// preShow: false
+// rt: "2020-10-05"
+// sc: 0
+// showInfo: "今天5家影院放映5场"
+// showst: 4
+// star: "刘敏涛,荣梓杉,谭凯"
+// version: ""
+// wish: 26347
+
+      this.$axios.get('/ajax/comingList?ci=10&token=&limit=10&optimus_uuid=BEDC8590053911EB9A5577ABB602C988CEF95AB0B1994C41A216B22F0A914DCB&optimus_risk_level=71&optimus_code=10').then(res => {
+        if(res.status == 200){
+          console.log(res)
+          this.comingSoonList = res.data.coming
+          // this.comingSoonList = this.comingSoonList.map(item=>{
+          //   item.img = item.img.replace('w.h/', '') + '@1l_1e_1c_128w_180h'
+          //   return item
+          // })
+        }
+      })
+    }
 };
 </script>
 
